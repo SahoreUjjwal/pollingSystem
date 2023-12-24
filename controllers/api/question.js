@@ -32,7 +32,7 @@ module.exports.create=async (req,res)=>{
         let question= await Question.create(req.body);
         if(question){
             console.log(`Created question : ${question}`);
-            return res.json(200,{message:`Raised a Question : ${question.title}`});
+            return res.json(200,{message:`Raised a Question : ${question._id}`});
         }
         console.log(`Could not create question!`);
         return res.json(401,{message:'Could not create question!'});
@@ -51,11 +51,11 @@ module.exports.createOption=async (req,res)=>{
             return res.json(401,{message:'Could not find question ID!'});
         }
         let id = mongoose.Types.ObjectId();
-        let option= await Option.create({_id:id,text:req.body.text,link_to_vote:`http://localhost:8000/options/${id}/add_vote`,question:req.params.id});
+        let option= await Option.create({_id:id,text:req.body.text,link_to_vote:`http://localhost:8000/api/options/${id}/add_vote`,question:req.params.id});
         if(option){
             let pushedoption=await Question.findByIdAndUpdate(req.params.id,{$push:{"options":id}})
             console.log(`Created option : ${pushedoption}`);
-            return res.json(200,{message:`Created a option : ${option.text}`});
+            return res.json(200,{message:`Created a option : ${option._id}`});
         }
         console.log(`Could not create question!`);
         return res.json(401,{message:'Could not create question!'});
